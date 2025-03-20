@@ -13,7 +13,9 @@
   "description": "",
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/jsonwebtoken": "^9.0.9"
+    "@types/jsonwebtoken": "^9.0.9",
+    "@repo/backend-common": "workspace:*",
+    "@repo/common":"workspace:*"
   },
   "dependencies": {
     "@types/express": "^5.0.1",
