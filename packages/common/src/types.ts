@@ -3,9 +3,8 @@ import { z } from "zod";
 export const CreateUserSchema = z.object({
     username: z
         .string()
-        .min(5, "Username must be at least 5 characters long")
-        .max(16, "Username cannot exceed 16 characters")
-        .trim(),
+        .trim()
+        .email("Invalid email format"),
     password: z
         .string()
         .min(8, "Password must be at least 8 characters long")
