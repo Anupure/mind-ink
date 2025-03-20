@@ -1,11 +1,11 @@
 import { WebSocketServer } from "ws";
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from "./config";
+import { JWT_SECRET, WS_PORT } from "./config";
 
 
 
 
-const wss = new WebSocketServer({port: 8080});
+const wss = new WebSocketServer({port: WS_PORT? parseInt(WS_PORT) : 6000});
 
 wss.on('connection',(ws, request)=>{
     const url = request.url;
