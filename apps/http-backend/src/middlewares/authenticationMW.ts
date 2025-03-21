@@ -12,13 +12,13 @@ export const authenticationMW: RequestHandler = async (req, res, next) => {
     }
     try {
         const decoded = await jwt.verify(token, JWT_SECRET);
-        if(typeof decoded!=='string' ||!decoded){
+        if(typeof decoded==='string' ||!decoded){
             res.status(403).json({
                 "message": "Invalid token payload"
             });
         }
         else{
-            req.userId = decoded;
+            req.userId = decoded.userId;
             next();
         }
 
