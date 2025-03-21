@@ -3,8 +3,6 @@ import jwt from 'jsonwebtoken';
 import { JWT_SECRET, WS_PORT } from "./config";
 
 
-
-
 const wss = new WebSocketServer({port: WS_PORT? parseInt(WS_PORT) : 6000});
 
 wss.on('connection',(ws, request)=>{

@@ -1,6 +1,7 @@
 
 import { Router } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import bcrypt from 'bcrypt'
 import { JWT_SECRET } from "../../config";
 import {CreateUserSchema, SigninSchema} from "@repo/common/types"
 import {prismaClient} from "@repo/db/client"
@@ -27,10 +28,11 @@ userRouter.post("/signup",async (req,res)=>{
                 return
             }
             try {
+                const hashedPassword = await bcrypt.hash(req.body.password, 10);
                 const user = await prismaClient.user.create({
                     data:{
                         email: req.body.username,
-                        password: req.body.password,
+                        password: hashedPassword,
                         name: req.body.name
                     }
                 })
@@ -53,11 +55,11 @@ userRouter.post("/signup",async (req,res)=>{
     
 })
 
-userRouter.post("/signin",(req,res)=>{
+userRouter.post("/signin",async (req,res)=>{
     const parsedData = SigninSchema.safeParse(req.body)
     if(!parsedData.success){
         res.status(402).json({
-            "message":"invalid body"
+            "message":parsedData.error.issues[0]?.message
         })
     }
     if (!JWT_SECRET) {
@@ -67,7 +69,29 @@ userRouter.post("/signin",(req,res)=>{
         return
     }
     const {username, password} = parsedData.data
-    const token = jwt.sign(username,JWT_SECRET, { expiresIn: '1h' });
+    const user = await prismaClient.user.findFirst({
+        where: {
+            email: username
+        }
+    })
+    if(!user){
+        res.status(404).json({
+            "message":"User not found"
+        })
+        return
+    }
+    const hashedPassword = await bcrypt.compare(password,user.password)
+    if(!hashedPassword){
+        res.status(401).json({
+            "message":"Invalid credentials"
+        })
+        return
+    }
+    const token = jwt.sign(user.id,JWT_SECRET);
+    res.json({
+        "message": "User authenticated successfully",
+        "token": token
+    })
 })
 
 export default userRouter
