@@ -36,9 +36,14 @@ userRouter.post("/signup",async (req,res)=>{
                         name: req.body.name
                     }
                 })
+                if (!JWT_SECRET) {
+                    return;
+                }
+                const token = jwt.sign({ userId: user.id }, JWT_SECRET);
                 res.json({
                     "message": "User created successfully",
-                    "userId": user.id
+                    "userId": user.id,
+                    token
                 })
             } catch (error) {
                 res.status(500).json({

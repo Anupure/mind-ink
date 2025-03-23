@@ -1,13 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-
-.font-handwritten {
-  font-family: 'Indie Flower', cursive !important;
-}
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -31,9 +24,4 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    overflow-x: hidden;
-    width: 100vw;
 }

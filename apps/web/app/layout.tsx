@@ -1,9 +1,22 @@
+'use client'
 import "./globals.css";
-import "@repo/ui/styles.css";
-import { Inter } from "next/font/google";
+import { Indie_Flower } from 'next/font/google';
+import { Inter } from 'next/font/google';
+import Navbar from "./components/Navbar";
+import {Provider} from 'jotai'
+import { AuthPersistence } from "./components/AuthPersistance";
 
-const inter = Inter({ subsets: ["latin"] });
+const indieFlower = Indie_Flower({ 
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-handwritten',
+});
 
+const inter = Inter({ 
+  subsets: ['latin'], 
+  variable: '--font-sans' 
+});
 
 
 export default function RootLayout({
@@ -13,10 +26,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        
-        {children}
-        </body>
+        <body className={`${inter.variable} ${indieFlower.variable} bg-gray-100`}>
+          <Provider>
+            <AuthPersistence />
+            <Navbar />          
+            {children}
+          </Provider>
+          </body>
     </html>
   );
 }

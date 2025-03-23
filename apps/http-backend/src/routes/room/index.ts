@@ -1,5 +1,5 @@
-import { Router, Request, Response } from "express";
-import { authenticationMW } from "../../middlewares/authenticationMW";
+import { authenticationMW } from './../../middlewares/authenticationMW';
+import { Router, Request, Response } from "express";;
 import { CreateRoomSchema } from "@repo/common/types";
 import { prismaClient } from "@repo/db/client";
 
@@ -50,27 +50,30 @@ roomRouter.post("/create-room", authenticationMW, async (req: Request, res: Resp
         }
 
 })
-roomRouter.get("/chat/:roomId", authenticationMW, async (req: Request, res: Response)=>{
-    const roomId = Number(req.params.roomId);
+
+roomRouter.get("/get-room", authenticationMW, async (req: Request, res: Response)=>{
+    const slug = req.query.slug as string; 
+    if(!slug) return
     try {
-        const messages = await prismaClient.chat.findMany({
-            where:{
-                roomId
-            },
-            orderBy: {
-                createdAt: "desc"
-            },
-            take: 50
+        const room = await prismaClient.room.findFirst({
+            where: {
+                slug
+            }
         })
+        if(!room){
+            res.status(404).json({
+                "message":"Room not found"
+            })
+            return
+        }
         res.json({
-            messages
+            "room": room
         })
     } catch (error) {
         res.status(500).json({
             "message":"Internal server error: " + error
         })
     }
-    
 })
 
 export default roomRouter;
