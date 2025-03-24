@@ -21,7 +21,7 @@ model User{
   password String
   photo    String?
   rooms    Room[]
-  chat     Chat[]
+  chat     Shape[]
 }
 
 model Room{
@@ -30,16 +30,16 @@ model Room{
   createdAt DateTime @default(now())
   adminId   String
   admin  User @relation(fields: [adminId], references: [id])
-  chat Chat[]
+  Chat   Shape[]
 }
 
-
-model Chat{
+model Shape{
   id       Int @id @default(autoincrement())
-  roomId   Int
+  roomName String
   message  String
   userId   String
   createdAt DateTime @default(now())
-  room Room @relation(fields: [roomId], references: [id])
+  room Room @relation(fields: [roomName], references: [slug])
   user User @relation(fields: [userId], references: [id])
 }
+

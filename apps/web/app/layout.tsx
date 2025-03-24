@@ -5,6 +5,8 @@ import { Inter } from 'next/font/google';
 import Navbar from "./components/Navbar";
 import {Provider} from 'jotai'
 import { AuthPersistence } from "./components/AuthPersistance";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const indieFlower = Indie_Flower({ 
   weight: '400',
@@ -18,21 +20,29 @@ const inter = Inter({
   variable: '--font-sans' 
 });
 
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children,}: {children: React.ReactNode;}) {
+  const params = useParams();
+  const isRoomPage = params?.slug !== undefined;
+  
+  // Use this to handle client-only rendering for parts that might cause hydration issues
+  const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    // This will only run on the client after hydration
+    setIsClient(true);
+  }, []);
+  
+  console.log("isRoomPage: ", isRoomPage);
+  
   return (
     <html lang="en">
-        <body className={`${inter.variable} ${indieFlower.variable} bg-gray-100`}>
+        <body className={`${inter.variable} ${indieFlower.variable} bg-gray-100`} suppressHydrationWarning={true}>
           <Provider>
             <AuthPersistence />
-            <Navbar />          
+            {(!isRoomPage && isClient) && <Navbar />}
             {children}
           </Provider>
-          </body>
+        </body>
     </html>
   );
 }

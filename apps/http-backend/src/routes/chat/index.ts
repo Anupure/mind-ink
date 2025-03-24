@@ -6,12 +6,12 @@ import { Request, Response } from "express";
 
 const chatRouter = Router();
 
-chatRouter.get("/chat/:roomId", authenticationMW, async (req: Request, res: Response)=>{
-    const roomId = Number(req.params.roomId);
+chatRouter.get("/chat/:slug", authenticationMW, async (req: Request, res: Response)=>{
     try {
-        const messages = await prismaClient.chat.findMany({
+        const slug = req.params.slug;
+        const messages = await prismaClient.shape.findMany({
             where:{
-                roomId
+                roomName:slug
             },
             orderBy: {
                 createdAt: "desc"

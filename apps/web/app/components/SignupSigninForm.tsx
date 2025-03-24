@@ -117,6 +117,7 @@ export const SignupSigninForm = ({ type, onSuccess }: FormType) => {
 
   return (
     <Form {...form}>
+      {/*@ts-ignore*/}
       <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-4">
         {serverError && (
           <Alert variant="destructive" className="mb-4">
