@@ -5,9 +5,17 @@ import { prismaClient } from "@repo/db/client";
 
 
 const wss = new WebSocketServer({
-    port: WS_PORT ? parseInt(WS_PORT) : 6000,
-    host: '0.0.0.0'
+    port: 8080,
+    host: '0.0.0.0',
+    // Add CORS headers if needed
+    verifyClient: (info:any) => {
+      // Allow all origins for testing
+      info.req.headers['Access-Control-Allow-Origin'] = '*';
+      return true;
+    },
+    perMessageDeflate: false,
   });
+  
 interface User  {
     userId: string,
     rooms: string[],
@@ -24,7 +32,7 @@ const checkUser = (token : string) :string | null =>{
     }
     try {
         const decoded = jwt.verify(token, JWT_SECRET)
-        console.log(decoded)
+        console.log("decoded is",decoded)
         if(typeof decoded==='string' || !decoded || !decoded.userId){
             return null;
         }
@@ -36,6 +44,7 @@ const checkUser = (token : string) :string | null =>{
 }
 
 wss.on('connection',async (ws, request)=>{
+    console.log('New connection');
     const url = request.url;
     if(!url){
         return;
@@ -47,6 +56,7 @@ wss.on('connection',async (ws, request)=>{
         return;
     }
     const userId = checkUser(token);
+    console.log("decoded userId: ", userId);
     if(userId === null){
         console.log('Invalid token');
         ws.close();
@@ -55,15 +65,16 @@ wss.on('connection',async (ws, request)=>{
     users.push({userId, rooms: [], ws})
     ws.on('message', async (data)=>{
         const parsedData = JSON.parse(data as unknown as string);
-        if(!parsedData.roomId){
+        console.log("received data: ", parsedData);
+        if(!parsedData.roomName){
             return;
         }
-        if(!rooms.includes(parsedData.roomId)){
+        if(!rooms.includes(parsedData.roomName)){
             try {
-                const roomId = Number(parsedData.roomId);
+                const roomName = parsedData.roomName;
                 const dbRoom = await prismaClient.room.findMany({
                     where:{
-                        id: roomId
+                        slug: roomName
                     }
                 })
                 console.log("dbRoom: ",dbRoom);
@@ -82,8 +93,9 @@ wss.on('connection',async (ws, request)=>{
             return;
         }
         if(parsedData.type==='join_room'){
+            console.log("joining room: ", parsedData.roomName);
 
-            user.rooms.push(parsedData.roomId);
+            user.rooms.push(parsedData.roomName);
             user.ws.send(JSON.stringify({type: 'room_list', rooms}));
         }
         if(parsedData.type==='leave_room'){
@@ -94,7 +106,7 @@ wss.on('connection',async (ws, request)=>{
             const roomName = parsedData.roomName;
             const chat = await prismaClient.shape.create({
                 data: {
-                    roomName,
+                    roomSlug: roomName,
                     userId,
                     message:parsedData.message
                 }

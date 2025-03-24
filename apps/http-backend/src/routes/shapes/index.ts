@@ -1,17 +1,16 @@
 import { Router } from "express";
-import { authenticationMW } from "../../middlewares/authenticationMW";
 import { prismaClient } from "@repo/db/client";
 import { Request, Response } from "express";
 
 
-const chatRouter = Router();
+const shapesRouter : Router = Router();
 
-chatRouter.get("/chat/:slug", authenticationMW, async (req: Request, res: Response)=>{
+shapesRouter.get("/:slug", async (req: Request, res: Response)=>{
     try {
         const slug = req.params.slug;
         const messages = await prismaClient.shape.findMany({
             where:{
-                roomName:slug
+                roomSlug:slug
             },
             orderBy: {
                 createdAt: "desc"
@@ -28,3 +27,5 @@ chatRouter.get("/chat/:slug", authenticationMW, async (req: Request, res: Respon
     }
     
 })
+
+export default shapesRouter;

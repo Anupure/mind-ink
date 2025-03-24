@@ -1,34 +1,15 @@
-'use client';
-
-import React, { useEffect, useRef } from 'react';
+'use client'
 import { useParams } from 'next/navigation';
-import { initDraw } from '@/app/draw';
-import { RecordType } from 'zod';
+import { RoomCanvas } from '@/app/components/RoomCanvas';
 
 
 
 export default function RoomPage() {
+  console.log("Inside RoomPage");
   const { slug } = useParams<{ slug: string }>();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  console.log("room slug: ", slug);
 
-  useEffect(() => {
-    if (canvasRef.current) {
-        const canvas = canvasRef.current;
-        initDraw(canvas);
-    }
-
-    return () => {
-        window.removeEventListener('resize', resizeCanvas);
-      };
-  }, []);
-
-  return (
-    <div className="fixed top-0 left-0 w-screen h-screen">
-      <canvas ref={canvasRef} id="myCanvas" className="w-full h-full"></canvas>
-    </div>
-  );
+  return <RoomCanvas slug={slug} />;
 }
-function resizeCanvas(this: Window, ev: UIEvent) {
-    throw new Error('Function not implemented.');
-}
+
 

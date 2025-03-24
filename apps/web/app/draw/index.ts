@@ -1,4 +1,4 @@
-
+import axios from "axios";
 const mouse = {
     x: 0,
     y: 0,
@@ -20,13 +20,23 @@ type Shape = {
     radius: number,
 }
 
-export function initDraw(canvas: HTMLCanvasElement)  {
+export async function initDraw(canvas: HTMLCanvasElement, slug : string, socket: WebSocket)  {
     
       const ctx = canvas.getContext('2d');
 
-      const existingShapes: Shape[] = [];
-
+      const existingShapes: Shape[] = await getExistingShapes(slug);
+      
       if (!ctx) return;
+
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if(data.type === 'chat'){
+            const message = data.message;
+            existingShapes.push(message);
+            clearAndPopulateCanvas(canvas, ctx, existingShapes);
+        }
+      }
+
       let isMouseDown = false;
       const handleMouseDown = (e: MouseEvent) => {
         isMouseDown = true;
@@ -42,22 +52,26 @@ export function initDraw(canvas: HTMLCanvasElement)  {
         clearAndPopulateCanvas(canvas, ctx, existingShapes);
         ctx.strokeRect(mouse.x, mouse.y, size.width, size.height);
       };
-      const handleMouseUp = (e: MouseEvent) => {
+      const handleMouseUp = () => {
         isMouseDown = false;
-        existingShapes.push({
+        const shape : Shape = {
             type:'rect',
             x: mouse.x,
             y: mouse.y,
             width: size.width,
             height: size.height,
-        })
+        }
+        existingShapes.push(shape)
+        socket.send(JSON.stringify({
+          type: 'chat',
+          message: JSON.stringify(shape)
+        }))
       };
 
       const resizeCanvas = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        clearAndPopulateCanvas(canvas, ctx, existingShapes);
         
         ctx.strokeStyle = 'white';
         canvas.addEventListener('mousedown', handleMouseDown);
@@ -80,4 +94,16 @@ const clearAndPopulateCanvas = (canvas:HTMLCanvasElement, ctx:CanvasRenderingCon
         }
     })
     
+}
+
+const getExistingShapes = async(slug:string ) => {
+
+  const res = await axios.get(`http://localhost:5000/api/v1/shapes/${slug}`)
+  const messages = res.data.message;
+  const parsedMessage = JSON.parse(messages);
+  const shapes : Shape[] = parsedMessage.map((message: any) => JSON.parse(message));
+  
+  console.log("parsed Messages: ", parsedMessage);
+  console.log("shapes: ", shapes);
+  return shapes
 }
