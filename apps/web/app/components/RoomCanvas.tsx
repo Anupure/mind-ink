@@ -5,32 +5,38 @@ import { Canvas } from "./Canvas";
 
 export const RoomCanvas = ({ slug }: { slug: string }) => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [isConnecting, setIsConnecting] = useState(true);
 
   useEffect(() => {
-    console.log("in between slug: ", slug, "asnd type :", typeof(slug))
+    const token = localStorage.getItem('authToken')
+    if (!token) {
+      console.error("Token not found");
+      setIsConnecting(false);
+      return;
+    }
+
     const ws = new WebSocket(
-      `ws://127.0.0.1:8080/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbThtcmxndXgwMDAwcXA0c2pnd2oweTZ0IiwiaWF0IjoxNzQyODAyNDc2fQ.KpbmkV8_4LBCD77CcQoK64A5QIdHNvPJyzpmLKiAExk`
+      `ws://127.0.0.1:9000/?token=${token}`
     );
 
-    try {
-      ws.onopen = () => {
-        console.log("WebSocket Connected");
-        setSocket(ws);
-  
-        // Now that the connection is open, send the message
-        ws.send(JSON.stringify({ type: "JOIN_ROOM", roomName: slug }));
-      };
-    } catch (error) {
-    console.log("onOpen Error: ", error);
-    }
-    
+    ws.onopen = () => {
+      setSocket(ws);
+      setIsConnecting(false);
+      // Send join room message
+      ws.send(JSON.stringify({ 
+        type: "join_room", 
+        roomName: slug 
+      }));
+    };
 
     ws.onerror = (error) => {
       console.error("WebSocket Error: ", error);
+      setIsConnecting(false);
     };
 
     ws.onclose = () => {
       console.log("WebSocket Disconnected");
+      setIsConnecting(false);
     };
 
     return () => {
@@ -40,8 +46,12 @@ export const RoomCanvas = ({ slug }: { slug: string }) => {
     };
   }, [slug]);
 
+  if (isConnecting) {
+    return <div>Connecting...</div>;
+  }
+
   if (!socket) {
-    return <>Connecting...</>;
+    return <div>Connection Failed</div>;
   }
 
   return <Canvas slug={slug} socket={socket} />;

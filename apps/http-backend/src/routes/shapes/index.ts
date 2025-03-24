@@ -8,6 +8,7 @@ const shapesRouter : Router = Router();
 shapesRouter.get("/:slug", async (req: Request, res: Response)=>{
     try {
         const slug = req.params.slug;
+        console.log("slug in get shapes is " + slug)
         const messages = await prismaClient.shape.findMany({
             where:{
                 roomSlug:slug
@@ -17,12 +18,15 @@ shapesRouter.get("/:slug", async (req: Request, res: Response)=>{
             },
             take: 50
         })
-        res.json({
-            messages
-        })
+        if(!messages.length){
+            res.status(200).json({ messages:[]})
+            return
+        }else{
+            res.status(200).json({ messages: messages });
+        }
     } catch (error) {
-        res.status(500).json({
-            "message":"Internal server error: " + error
+        res.status(411).json({
+            message:[]
         })
     }
     

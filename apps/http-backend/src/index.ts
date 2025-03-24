@@ -19,8 +19,8 @@ console.log(HTTP_PORT,JWT_SECRET);
 
 app.use('/api/v1/user', userRouter);
 app.use("/api/v1/rooms", roomRouter);
-app.use('api/v1/shapes/', shapesRouter);
+app.use('/api/v1/shapes', shapesRouter);
 
-app.listen(Number(HTTP_PORT), '0.0.0.0', () => {
+app.listen(Number(HTTP_PORT), () => {
     console.log(`HTTP server listening on port ${HTTP_PORT}`);
   });
