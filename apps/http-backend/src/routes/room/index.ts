@@ -51,8 +51,9 @@ roomRouter.post("/create-room", authenticationMW, async (req: Request, res: Resp
 
 })
 
-roomRouter.get("/get-room", authenticationMW, async (req: Request, res: Response)=>{
+roomRouter.get("/get-room", async (req: Request, res: Response)=>{
     const slug = req.query.slug as string; 
+    console.log("slug in get room is " + slug)
     if(!slug) return
     try {
         const room = await prismaClient.room.findFirst({

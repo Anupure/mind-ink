@@ -1,10 +1,15 @@
 'use client'
-import React from 'react'
 import { useParams } from 'next/navigation';
+import { RoomCanvas } from '@/app/components/RoomCanvas';
 
-export default function Room() {
-    const { slug } = useParams();
-  return (
-    <div>You have reached room {slug}</div>
-  )
+
+
+export default function RoomPage() {
+  console.log("Inside RoomPage");
+  const { slug } = useParams<{ slug: string }>();
+  console.log("room slug: ", slug);
+
+  return <RoomCanvas slug={slug} />;
 }
+
+
