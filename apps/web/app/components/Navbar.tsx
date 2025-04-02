@@ -40,10 +40,10 @@ export default function Navbar() {
             <PaperEffect intensity={5}>
               <div className="flex justify-between items-center p-4">
                 <div className="flex items-center space-x-2">
-                  <h1 className="text-2xl font-handwritten font-bold">Mind Ink</h1>
+                  <InkLink href="/" className="text-2xl font-handwritten font-bold">Mind Ink</InkLink>
                 </div>
                 <nav className="hidden md:flex space-x-6">
-                  <InkLink href="/dashboard" className="hover:text-gray-700">Dashboard</InkLink>
+                  <InkLink href="/lobby" className="hover:text-gray-700">Dashboard</InkLink>
                   <InkLink href="/features" className="hover:text-gray-700">Features</InkLink>
                   <InkLink href="/about-us" className="hover:text-gray-700">About us</InkLink>
                   <InkLink href="/pricing" className="hover:text-gray-700">Pricing</InkLink>
