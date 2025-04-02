@@ -14,9 +14,9 @@ export const RoomCanvas = ({ slug }: { slug: string }) => {
       setIsConnecting(false);
       return;
     }
-    const WS_BASE_URL = process.env.NODE_ENV === "development" 
+    const WS_BASE_URL = process.env.NEXT_PUBLIC_ENVIRONMENT === "development" 
       ? process.env.NEXT_PUBLIC_BACKEND_URL_DEVELOPMENT || "ws://127.0.0.1"
-      : process.env.NODE_ENV === "test" 
+      : process.env.NEXT_PUBLIC_ENVIRONMENT=== "staging" 
       ? process.env.NEXT_PUBLIC_BACKEND_URL_TEST?.replace("http://", "ws://") || "ws://13.217.201.135"
       : process.env.NEXT_PUBLIC_BACKEND_URL_PRODUCTION?.replace("http://", "ws://") || "ws://3.87.245.116";
     
