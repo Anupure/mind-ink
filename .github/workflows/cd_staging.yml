@@ -12,7 +12,7 @@ jobs:
         env:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_STAGING }}
             HOSTNAME: ${{ secrets.SSH_HOST_STAGING }}
-            USER_NAME: ${{ secrets.USER_NAME_STAGING }}
+            USER_NAME: ${{ secrets.SSH_USER_NAME_STAGING }}
 
         steps:
         - uses: actions/checkout@v2 
@@ -22,7 +22,7 @@ jobs:
             echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
             ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
                 set -e  # Stop execution if any command fails
-                cd mindink/
+                cd mind-ink/
                 git checkout main
                 git fetch --all
                 git reset --hard origin/main

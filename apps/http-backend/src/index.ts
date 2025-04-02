@@ -7,7 +7,7 @@ import cors from 'cors';
 
 const app = express();
 
-const PORT = Number(HTTP_PORT || 6000);
+const PORT = Number(HTTP_PORT || 5000);
 app.use(express.json());
 //cors allow all origins
 app.use(cors({
