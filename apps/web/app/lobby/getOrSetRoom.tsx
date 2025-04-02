@@ -9,9 +9,16 @@ dotenv.config()
 
 
 export const getRoom = async(roomName: string , router: ReturnType<typeof useRouter> ) =>{
-    const HTTP_URL = "http://localhost:5000";
+    const BACKEND_URL =
+  process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL_DEVELOPMENT
+    : process.env.NEXT_PUBLIC_ENVIRONMENT === "staging"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL_STAGING
+    : process.env.NEXT_PUBLIC_BACKEND_URL_PRODUCTION;
+
+  const API_PORT = process.env.NEXT_PUBLIC_HTTP_PORT || 5000;
+    const HTTP_URL = `${BACKEND_URL}:${API_PORT}`;
     const slug = roomName;
-    console.log(HTTP_URL)
     //get token from session storage
     const token = localStorage.getItem('authToken');
     console.log(token)
