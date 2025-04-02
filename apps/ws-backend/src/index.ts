@@ -2,6 +2,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET, WS_PORT } from "./config";
 import { prismaClient } from "@repo/db/client";
+const PORT = Number(WS_PORT || 7000);
 
 const wss = new WebSocketServer({
     port: 9000,
@@ -131,4 +132,4 @@ wss.on('connection', async (ws, request) => {
     });
 });
 
-console.log(`WebSocket server running on port ${WS_PORT}`);
+console.log(`WebSocket server running on port ${PORT}`);
