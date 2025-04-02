@@ -70,6 +70,7 @@ export const SignupSigninForm = ({ type, onSuccess }: FormType) => {
   const onSubmit = async (values: z.infer<typeof schema>) => {
     setIsSubmitting(true);
     setServerError(null);
+    console.log("BACKEND_URL: ", BACKEND_URL)
     
     try {
       const endpoint = type === "signup" 
