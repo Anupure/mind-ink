@@ -46,11 +46,12 @@ export const SignupSigninForm = ({ type, onSuccess }: FormType) => {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const BACKEND_URL = process.env.NODE_ENV === "development" 
-  ? process.env.NEXT_PUBLIC_BACKEND_URL_DEVELOPMENT
-  : process.env.NODE_ENV === "test" 
-  ? process.env.NEXT_PUBLIC_BACKEND_URL_STAGING
-  : process.env.NEXT_PUBLIC_BACKEND_URL_PRODUCTION;
+  const BACKEND_URL =
+  process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL_DEVELOPMENT
+    : process.env.NEXT_PUBLIC_ENVIRONMENT === "staging"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL_STAGING
+    : process.env.NEXT_PUBLIC_BACKEND_URL_PRODUCTION;
 
   const API_PORT = process.env.NEXT_PUBLIC_HTTP_PORT || 5000;
   
