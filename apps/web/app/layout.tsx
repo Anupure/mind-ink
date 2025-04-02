@@ -36,7 +36,7 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
   
   return (
     <html lang="en">
-        <body className={`${inter.variable} ${indieFlower.variable} bg-gray-100`} suppressHydrationWarning={true}>
+        <body className={`${inter.variable} ${indieFlower.variable} bg-gray-100 text-gray-900`} suppressHydrationWarning={true}>
           <Provider>
             <AuthPersistence />
             {(!isRoomPage && isClient) && <Navbar />}
