@@ -7,6 +7,7 @@ import cors from 'cors';
 
 const app = express();
 
+const PORT = Number(HTTP_PORT || 6000);
 app.use(express.json());
 //cors allow all origins
 app.use(cors({
@@ -21,6 +22,6 @@ app.use('/api/v1/user', userRouter);
 app.use("/api/v1/rooms", roomRouter);
 app.use('/api/v1/shapes', shapesRouter);
 
-app.listen(Number(HTTP_PORT), () => {
-    console.log(`HTTP server listening on port ${HTTP_PORT}`);
+app.listen(Number(PORT), () => {
+    console.log(`HTTP server listening on port ${PORT}`);
   });
