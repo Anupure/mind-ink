@@ -27,7 +27,7 @@ jobs:
                 git fetch --all
                 git reset --hard origin/main
                 git pull origin main
-                pnpm install
-                pnpm run build
+                /home/ubuntu/.nvm/versions/node/v22.14.0/bin/pnpm install
+                /home/ubuntu/.nvm/versions/node/v22.14.0/bin/pnpm run build
                 pm2 restart all
             EOF
