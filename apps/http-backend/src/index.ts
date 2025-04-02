@@ -11,7 +11,7 @@ const PORT = Number(HTTP_PORT || 5000);
 app.use(express.json());
 //cors allow all origins
 app.use(cors({
-  origin: 'http://http://staging.fe.mindink.space',
+  origin: 'http://staging.fe.mindink.space',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
