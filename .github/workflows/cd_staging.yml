@@ -22,6 +22,8 @@ jobs:
             echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
             ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
                 set -e  # Stop execution if any command fails
+                export NVM_DIR="/home/ubuntu/.nvm"
+                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
                 cd mind-ink/
                 git checkout main
                 git fetch --all
