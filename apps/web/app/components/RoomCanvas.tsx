@@ -14,10 +14,17 @@ export const RoomCanvas = ({ slug }: { slug: string }) => {
       setIsConnecting(false);
       return;
     }
+    const WS_BASE_URL = process.env.NODE_ENV === "development" 
+      ? process.env.NEXT_PUBLIC_BACKEND_URL_DEVELOPMENT || "ws://127.0.0.1"
+      : process.env.NODE_ENV === "test" 
+      ? process.env.NEXT_PUBLIC_BACKEND_URL_TEST?.replace("http://", "ws://") || "ws://13.217.201.135"
+      : process.env.NEXT_PUBLIC_BACKEND_URL_PRODUCTION?.replace("http://", "ws://") || "ws://3.87.245.116";
+    
+    const WS_PORT = process.env.NEXT_PUBLIC_WS_PORT || "6000";
+    
+    const wsUrl = `${WS_BASE_URL}:${WS_PORT}/?token=${token}`;
 
-    const ws = new WebSocket(
-      `ws://127.0.0.1:9000/?token=${token}`
-    );
+    const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
       setSocket(ws);

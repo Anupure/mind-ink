@@ -2,10 +2,10 @@ import { WebSocketServer, WebSocket } from "ws";
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET, WS_PORT } from "./config";
 import { prismaClient } from "@repo/db/client";
-const PORT = Number(WS_PORT || 7000);
+const PORT = Number(WS_PORT || 6000);
 
 const wss = new WebSocketServer({
-    port: 9000,
+    port: PORT,
     verifyClient: (info:any) => {
       info.req.headers['Access-Control-Allow-Origin'] = '*';
       return true;
