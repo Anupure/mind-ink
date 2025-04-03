@@ -2,12 +2,21 @@ import { WebSocketServer, WebSocket } from "ws";
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET, WS_PORT } from "./config";
 import { prismaClient } from "@repo/db/client";
+const PORT = Number(WS_PORT || 6000);
 
 const wss = new WebSocketServer({
-    port: 9000,
-    verifyClient: (info:any) => {
-      info.req.headers['Access-Control-Allow-Origin'] = '*';
-      return true;
+    port: PORT,
+    verifyClient: (info:any, callback) => {
+      // Allow all origins
+      const origin = info.req.headers.origin;
+      info.req.headers['Access-Control-Allow-Origin'] = origin || '*';
+      info.req.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
+      info.req.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization';
+      info.req.headers['Access-Control-Allow-Credentials'] = 'true';
+
+      console.log(`Connection attempt from origin: ${origin || 'unknown'}`);
+    
+      callback(true); // Accept the connectio   n
     },
     perMessageDeflate: false,
 });
@@ -131,4 +140,4 @@ wss.on('connection', async (ws, request) => {
     });
 });
 
-console.log(`WebSocket server running on port ${WS_PORT}`);
+console.log(`WebSocket server running on port ${PORT}`);

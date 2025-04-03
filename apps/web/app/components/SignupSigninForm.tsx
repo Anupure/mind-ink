@@ -45,6 +45,15 @@ export const SignupSigninForm = ({ type, onSuccess }: FormType) => {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const BACKEND_URL =
+  process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL_DEVELOPMENT
+    : process.env.NEXT_PUBLIC_ENVIRONMENT === "staging"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL_STAGING
+    : process.env.NEXT_PUBLIC_BACKEND_URL_PRODUCTION;
+
+  const API_PORT = process.env.NEXT_PUBLIC_HTTP_PORT || 5000;
   
   const schema = schemas[type];
 
@@ -62,11 +71,12 @@ export const SignupSigninForm = ({ type, onSuccess }: FormType) => {
   const onSubmit = async (values: z.infer<typeof schema>) => {
     setIsSubmitting(true);
     setServerError(null);
+    console.log("BACKEND_URL: ", BACKEND_URL)
     
     try {
       const endpoint = type === "signup" 
-        ? "http://localhost:5000/api/v1/user/signup" 
-        : "http://localhost:5000/api/v1/user/signin";
+  ? `${BACKEND_URL}:${API_PORT}/api/v1/user/signup` 
+  : `${BACKEND_URL}:${API_PORT}/api/v1/user/signin`;
         
       const response = await fetch(endpoint, {
         method: 'POST',

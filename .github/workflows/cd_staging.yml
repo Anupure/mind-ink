@@ -1,0 +1,35 @@
+name: Deploy to staging
+on:
+    push:
+        branches:
+            - "main"
+
+jobs:
+    redeploy_everything:
+        name: deploying all to staging
+        runs-on: ubuntu-latest
+        
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_STAGING }}
+            HOSTNAME: ${{ secrets.SSH_HOST_STAGING }}
+            USER_NAME: ${{ secrets.SSH_USER_NAME_STAGING }}
+
+        steps:
+        - uses: actions/checkout@v2 
+
+        - name: SSH into staging and deploy
+          run: |
+            echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+            ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
+                set -e  # Stop execution if any command fails
+                export NVM_DIR="/home/ubuntu/.nvm"
+                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                cd mind-ink/
+                git checkout main
+                git fetch --all
+                git reset --hard origin/main
+                git pull origin main
+                /home/ubuntu/.nvm/versions/node/v22.14.0/bin/pnpm install
+                /home/ubuntu/.nvm/versions/node/v22.14.0/bin/pnpm run build
+                pm2 restart all
+            EOF
