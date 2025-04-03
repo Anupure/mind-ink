@@ -23,7 +23,7 @@ export const RoomCanvas = ({ slug }: { slug: string }) => {
     const WS_PORT = process.env.NEXT_PUBLIC_WS_PORT || "6000";
     
     const wsUrl = `${WS_BASE_URL}:${WS_PORT}/?token=${token}`;
-
+    console.log("url: ", wsUrl)
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
