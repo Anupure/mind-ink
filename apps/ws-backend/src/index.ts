@@ -15,9 +15,8 @@ const wss = new WebSocketServer({
       info.req.headers['Access-Control-Allow-Credentials'] = 'true';
 
       console.log(`Connection attempt from origin: ${origin || 'unknown'}`);
-      
-      // You can also implement specific origin checks here if needed
-      callback(true); // Accept the connection
+    
+      callback(true); // Accept the connectio   n
     },
     perMessageDeflate: false,
 });
