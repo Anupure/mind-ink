@@ -6,9 +6,18 @@ const PORT = Number(WS_PORT || 6000);
 
 const wss = new WebSocketServer({
     port: PORT,
-    verifyClient: (info:any) => {
-      info.req.headers['Access-Control-Allow-Origin'] = '*';
-      return true;
+    verifyClient: (info:any, callback) => {
+      // Allow all origins
+      const origin = info.req.headers.origin;
+      info.req.headers['Access-Control-Allow-Origin'] = origin || '*';
+      info.req.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
+      info.req.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization';
+      info.req.headers['Access-Control-Allow-Credentials'] = 'true';
+
+      console.log(`Connection attempt from origin: ${origin || 'unknown'}`);
+      
+      // You can also implement specific origin checks here if needed
+      callback(true); // Accept the connection
     },
     perMessageDeflate: false,
 });
