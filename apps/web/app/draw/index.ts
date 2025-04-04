@@ -154,10 +154,18 @@ const clearAndPopulateCanvas = (canvas: HTMLCanvasElement, ctx: CanvasRenderingC
         }
     });
 };
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL_DEVELOPMENT
+    : process.env.NEXT_PUBLIC_ENVIRONMENT === "staging"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL_STAGING
+    : process.env.NEXT_PUBLIC_BACKEND_URL_PRODUCTION;
+
+  const API_PORT = process.env.NEXT_PUBLIC_HTTP_PORT || 5000;
 
 const getExistingShapes = async (slug: string): Promise<Shape[]> => {
     try {
-        const res = await axios.get(`http://localhost:5000/api/v1/shapes/${slug}`);
+        const res = await axios.get(`${BACKEND_URL}:${API_PORT}/api/v1/shapes/${slug}`);
         return res.data.messages.map((x: any) => JSON.parse(x.message));
     } catch (error) {
         console.error("Error fetching shapes:", error);
