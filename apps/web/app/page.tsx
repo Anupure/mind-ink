@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { PaperEffect } from '@/ui/components/paperEffect';
 import {  InkButton } from '@/ui/components/inkButton';
 import { InkLink } from '@/ui/components/inkLink';
+// import Image from 'next/image';
 
 export default function Home() {
   
@@ -38,8 +39,8 @@ export default function Home() {
             <PaperEffect>
               <div className="p-6 md:p-12 h-full flex items-center justify-center">
                 {/* Placeholder for hero image */}
-                <div className="bg-gray-200 w-full h-64 flex items-center justify-center rounded-lg">
-                  <span className="text-gray-500">App Preview</span>
+                <div className=" w-full h-64 flex items-center justify-center rounded-lg">
+                  <span><img src={'./Animation.gif'} alt='App Preview' /></span>
                 </div>
               </div>
             </PaperEffect>

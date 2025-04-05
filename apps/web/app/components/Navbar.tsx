@@ -45,8 +45,7 @@ export default function Navbar() {
                 <nav className="hidden md:flex space-x-6">
                   <InkLink href="/lobby" className="hover:text-gray-700">Dashboard</InkLink>
                   <InkLink href="/features" className="hover:text-gray-700">Features</InkLink>
-                  <InkLink href="/about-us" className="hover:text-gray-700">About us</InkLink>
-                  <InkLink href="/pricing" className="hover:text-gray-700">Pricing</InkLink>
+                  <InkLink href="/about" className="hover:text-gray-700">About us</InkLink>
                   <InkLink href="/contact-us" className="hover:text-gray-700">Contact us</InkLink>
                 </nav>
                 <div className="flex space-x-3">

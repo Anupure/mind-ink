@@ -53,19 +53,21 @@ export default function LobbyPage() {
   return (
     <div>
       <div className='transform container mx-auto px-4 py-6 '>
-      <PaperEffect>
-          <div className='flex justify-between'>
-            <div></div>
-            <div className='flex flex-col text-center min-w-10'>
-              <h1 className='text-2xl font-semibold font-handWritten'>Lobby Page</h1>
-              <p>Welcome to the lobby page!</p>
-            </div>
-            <div className='flex align-middle justify-center text-center my-auto'>
-              <Circle size={24} color="green" fill="green" className='mr-2'/>
-              <p>Current User COunt: 1</p> 
+        <div className="flex w-full justify-center">
+          <div className="w-[30%] min-w-[300px] flex justify-center">
+            <div className="w-full">
+              <PaperEffect>
+                <div className="flex justify-between w-full">
+                  <div className="flex flex-col text-center w-full">
+                    <h1 className="text-2xl font-semibold font-handWritten">Lobby Page</h1>
+                    <p>Welcome to the lobby page!</p>
+                  </div>
+                </div>
+              </PaperEffect>
             </div>
           </div>
-        </PaperEffect>
+        </div>
+      
       </div>
       <div className='container mx-auto px-4 py-6 '>
         <div className='grid md:grid-cols-2 gap-12 items-center'>
